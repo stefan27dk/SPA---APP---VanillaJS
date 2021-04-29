@@ -1,9 +1,10 @@
+// Imports
+import Dashboard from "./views/Dashboard.js";
+import Posts from "./views/Posts.js";
+import Settings from "./views/Settings.js";
 
 
-
-
-
-// Navigator------------------------------------------------------------------------->
+// Navigator--------------------------------------------------------------------------------->
 const navigateTo = url => {
   history.pushState(null, null, url);
   router();
@@ -11,19 +12,19 @@ const navigateTo = url => {
 
  
 
-// Router------------------------------------------------------------------------->
+// Router------------------------------------------------------------------------------------>
 const router = async () => {
  const routes = [
-   {path: "/", view: () => console.log("Viewing Dashboard")},
-   {path: "/posts", view: () => console.log("Viewing Posts")},
-   {path: "/settings", view: () => console.log("Viewing Settings")}
+   {path: "/", view: Dashboard}, // On Path "/" use the dashboard class and inject html
+   {path: "/posts", view: Posts },
+   {path: "/settings", view: Settings }
  ];
 
  
 
  
 
- // Test each route for potential match ------------------------------------------->
+ // Test each route for potential match ----------------------------------------------------->
  const potentialMatches = routes.map(route => {
   return {
       route: route,
@@ -46,11 +47,18 @@ const router = async () => {
      isMatch: true
      };
  }
- console.log(match.route.view());
+
+ const view = new match.route.view();
+
+ document.querySelector("#app").innerHTML = await view.getHtml();
+ 
 };
 
 
 
+
+
+// On-Navigating-Back&Forth-Load the Content--Together with the url------------------------------------------------------------------------------------>
 window.addEventListener("popstate", router);
 
 
